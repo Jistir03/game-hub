@@ -13,40 +13,59 @@ import GenreSkeleton from "./GenreSkeleton";
 
 interface Props {
   onSelectGenre: (genre: Genre) => void;
+  selectedGenre: Genre | null;
 }
-const GenreList = ({ onSelectGenre }: Props) => {
+
+const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
   if (error) return null;
-  //   if (isLoading) return <Spinner />;
+
   const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
   return (
     <>
       {isLoading &&
         skeletons.map((skeleton) => (
           <HStack key={skeleton}>
-            {" "}
             <GenreSkeleton />
           </HStack>
         ))}
+
       <List>
-        {data.map((genre) => (
-          <ListItem key={genre.id} paddingY="5px">
-            <HStack>
-              <Image
-                boxSize="32px"
-                borderRadius={8}
-                src={getCroppedImageUrl(genre.image_background)}
-              />
-              <Button
-                onClick={() => onSelectGenre(genre)}
-                variant="link"
-                fontSize="lg"
-              >
-                {genre.name}
-              </Button>
-            </HStack>
-          </ListItem>
-        ))}
+        {data.map((genre) => {
+          const activeBgColor =
+            genre.id === selectedGenre?.id ? "gray.500" : "transparent";
+          const activeFontWeight =
+            genre.id === selectedGenre?.id ? "bold" : "normal";
+          const activeFontColor = genre.id === selectedGenre?.id ? "black" : "";
+          return (
+            <ListItem
+              key={genre.id}
+              paddingY="5px"
+              paddingX="5px"
+              bgColor={activeBgColor}
+              borderRadius={8}
+            >
+              <HStack spacing={4}>
+                <Image
+                  boxSize="32px"
+                  borderRadius="full"
+                  src={getCroppedImageUrl(genre.image_background)}
+                  alt={genre.name}
+                />
+                <Button
+                  fontWeight={activeFontWeight}
+                  color={activeFontColor}
+                  onClick={() => onSelectGenre(genre)}
+                  variant="link"
+                  fontSize="lg"
+                >
+                  {genre.name}
+                </Button>
+              </HStack>
+            </ListItem>
+          );
+        })}
       </List>
     </>
   );
