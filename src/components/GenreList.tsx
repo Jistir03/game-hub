@@ -1,5 +1,6 @@
 import {
   Button,
+  Heading,
   HStack,
   Image,
   List,
@@ -30,7 +31,9 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
             <GenreSkeleton />
           </HStack>
         ))}
-
+      <Heading fontSize="2xl" marginBottom={3}>
+        Genres
+      </Heading>
       <List>
         {data.map((genre) => {
           const activeBgColor =
@@ -49,11 +52,14 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
               <HStack spacing={4}>
                 <Image
                   boxSize="32px"
-                  borderRadius="full"
+                  borderRadius={8}
+                  objectFit="cover"
                   src={getCroppedImageUrl(genre.image_background)}
                   alt={genre.name}
                 />
                 <Button
+                  whiteSpace="normal"
+                  textAlign="left"
                   fontWeight={activeFontWeight}
                   color={activeFontColor}
                   onClick={() => onSelectGenre(genre)}
